@@ -1132,10 +1132,10 @@ function draw()
 
   //positions for all buttons...
   skip.position(920,700);
-  nameInput.position((displayWidth/2)-40, displayHeight/2);
+  nameInput.position((displayWidth/2)-200, displayHeight/2);
   enter.position(displayWidth/2+50, displayHeight/2+ 50);
   startNext.position(920,700);
-  settingsss.position(920, 60);
+  settingsss.position(920,60);
   MMedium.position(displayWidth/2+40, displayHeight/2);
   EEasy.position(displayWidth/2+50, displayHeight/2-40);
   HHard.position(displayWidth/2+50, displayHeight/2+40);
