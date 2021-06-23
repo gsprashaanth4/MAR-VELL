@@ -320,7 +320,7 @@ function setup()
   rlls = [];
 
   //gameState defining.......
-  gameState = INTRO1;  
+  gameState = INTRO2;  
 
   //demo pieces for gameState- RULES.......
   sDemo = createSprite(600,70*1);
@@ -1136,7 +1136,7 @@ function draw()
 
   //positions for all buttons...
   skip.position(920,700);
-  nameInput.position(displayWidth/2-10, displayHeight/2);
+  nameInput.position(displayWidth/2-40, displayHeight/2);
   enter.position(displayWidth/2+50, displayHeight/2+ 50);
   startNext.position(920,700);
   settingsss.position(920, 60);
