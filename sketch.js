@@ -1665,7 +1665,7 @@ function draw()
     textSize(16);
     textFont("Courier new");
     fill("#02F702");
-    text("select game difficulty", 180, 360);
+    text("select game difficulty", 181, 365);
     pop();
     jumpTo.hide();
     baack.hide();
