@@ -1138,8 +1138,8 @@ function draw()
   skip.position(920,700);
   nameInput.position(displayWidth/2-10, displayHeight/2);
   enter.position(displayWidth/2+50, displayHeight/2+ 50);
-  startNext.position(980,700);
-  settingsss.position(980, 60);
+  startNext.position(920,700);
+  settingsss.position(920, 60);
   MMedium.position(displayWidth/2+40, displayHeight/2);
   EEasy.position(displayWidth/2+50, displayHeight/2-40);
   HHard.position(displayWidth/2+50, displayHeight/2+40);
@@ -1150,8 +1150,8 @@ function draw()
   rul.position(displayWidth/2+49, displayHeight/2);
   sto.position(displayWidth/2+50, displayHeight/2-40);
   pla.position(displayWidth/2+50, displayHeight/2+40);
-  baack.position(980,700);
-  playy.position(980,700);
+  baack.position(920,700);
+  playy.position(920,700);
   
 
   if(gameState === INTRO1)
