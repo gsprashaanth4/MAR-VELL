@@ -1132,8 +1132,8 @@ function draw()
 
   //positions for all buttons...
   skip.position(920,700);
-  nameInput.position(displayWidth/2-20, displayHeight/2);
-  enter.position(displayWidth/2+40, displayHeight/2+ 50);
+  nameInput.position(displayWidth/2-40, displayHeight/2);
+  enter.position(displayWidth/2+20, displayHeight/2+ 50);
   startNext.position(920,700);
   settingsss.position(900,60);
   MMedium.position(displayWidth/2+40, displayHeight/2);
@@ -1142,7 +1142,7 @@ function draw()
   SSoundOOn.position(displayWidth/2, displayHeight/2);
   SSoundOOff.position(displayWidth/2, displayHeight/2);
   resumee.position(displayWidth/2+23, displayHeight/2-30);
-  jumpTo.position(displayWidth/2+27, displayHeight/2+ 90);
+  jumpTo.position(displayWidth/2+7, displayHeight/2+ 90);
   rul.position(displayWidth/2+49, displayHeight/2);
   sto.position(displayWidth/2+50, displayHeight/2-40);
   pla.position(displayWidth/2+50, displayHeight/2+40);
