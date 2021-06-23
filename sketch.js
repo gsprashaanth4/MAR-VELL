@@ -1,10 +1,6 @@
 // This is G.S.Prashaanth's self designed game - namely: MAR-VELL.
 // All ideas of this game is indegeniously developed, obtaining some of them with collaboration with my teacher - nithya kumaraguru ma'am
-// this game is structurally based on the Matter.js 2d rigid body physics engine.
-
-
-
-//this is gsp....you talking to you...this note is for you stating a suddenly flashed idea of using the 'yes' commands to trigger the world.add or world.remove for the destrying of the villains instead of using the yes as a 'var' to note if the villain has been destryed or not.....all the best. 
+// this game is structurally based on the Matter.js 2d rigid body physics engine. 
 
 var INTRO1 = 0;
 var INTRO2 = 1;
@@ -1136,7 +1132,7 @@ function draw()
 
   //positions for all buttons...
   skip.position(920,700);
-  nameInput.position(530, displayHeight/2);
+  nameInput.position(560, displayHeight/2);
   enter.position(displayWidth/2+50, displayHeight/2+ 50);
   startNext.position(920,700);
   settingsss.position(920, 60);
