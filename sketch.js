@@ -1133,7 +1133,7 @@ function draw()
   //positions for all buttons...
   skip.position(920,700);
   nameInput.position((displayWidth/2)-200, displayHeight/2);
-  enter.position(displayWidth/2+50, displayHeight/2+ 50);
+  enter.position(500, displayHeight/2+ 50);
   startNext.position(920,700);
   settingsss.position(920,60);
   MMedium.position(displayWidth/2+40, displayHeight/2);
