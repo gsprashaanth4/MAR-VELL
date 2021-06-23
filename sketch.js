@@ -1132,7 +1132,7 @@ function draw()
 
   //positions for all buttons...
   skip.position(920,700);
-  nameInput.position(displayWidth/2.2, displayHeight/2);
+  nameInput.position((displayWidth/2)-500, displayHeight/2);
   enter.position(displayWidth/2+50, displayHeight/2+ 50);
   startNext.position(920,700);
   settingsss.position(920, 60);
