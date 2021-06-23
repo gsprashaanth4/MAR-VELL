@@ -505,7 +505,7 @@ function setup()
   i1Sound.play();
 
   //all created buttons for various functions.......
-  nameInput = createInput("");
+  nameInput = createInput('');
   enter = createButton('NEXT');
   skip = createButton('SKIP');
   settingsss = createButton("Settings");
