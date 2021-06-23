@@ -1135,7 +1135,7 @@ function draw()
   drawSprites();
 
   //positions for all buttons...
-  skip.position(900,700);
+  skip.position(920,700);
   nameInput.position(displayWidth/2-10, displayHeight/2);
   enter.position(displayWidth/2+50, displayHeight/2+ 50);
   startNext.position(980,700);
