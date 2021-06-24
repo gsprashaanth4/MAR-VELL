@@ -261,7 +261,6 @@ function preload()
   swimage = loadImage("MAR-VELL.png");
   introimage = loadImage("intro.png");
   logoimage = loadImage("logo.png");
-  i1Sound = loadSound("intrommarvell.mp3");
   vBurst = loadSound("roboblast2.mp3");
   svBurst = loadSound("roboblast1.mp3");
   running = loadSound("footstep3.mp3");
@@ -501,8 +500,6 @@ function setup()
   sw = createSprite(width/2, height/2, 20, 20);
   sw.addImage(swimage); 
   sw.scale = 0.7;  
-  
-  i1Sound.play();
 
   //all created buttons for various functions.......
   nameInput = createInput('');
