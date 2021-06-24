@@ -56,7 +56,7 @@ class Timer
         this.textSO.position(90,50);
 
         this.warning.html("get out before the base explodes");
-        this.warning.position(490, 750);
+        this.warning.position(490, 745);
     }
 
 }    
