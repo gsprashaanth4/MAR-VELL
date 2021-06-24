@@ -1135,7 +1135,7 @@ function draw()
   nameInput.position(displayWidth/2-90, displayHeight/2);
   enter.position(displayWidth/2-30, displayHeight/2+ 50);
   startNext.position(920,700);
-  settingsss.position(900,60);
+  settingsss.position(900, 60);
   MMedium.position(displayWidth/2+50, displayHeight/2);
   EEasy.position(displayWidth/2+60, displayHeight/2-40);
   HHard.position(displayWidth/2+60, displayHeight/2+40);
