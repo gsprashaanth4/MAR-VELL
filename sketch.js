@@ -1139,9 +1139,9 @@ function draw()
   MMedium.position(displayWidth/2+50, displayHeight/2);
   EEasy.position(displayWidth/2+60, displayHeight/2-40);
   HHard.position(displayWidth/2+60, displayHeight/2+40);
-  SSoundOOn.position(displayWidth/2-70, displayHeight/2);
-  SSoundOOff.position(displayWidth/2-70, displayHeight/2);
-  resumee.position(displayWidth/2-37, displayHeight/2-30);
+  SSoundOOn.position(displayWidth/2-68, displayHeight/2);
+  SSoundOOff.position(displayWidth/2-68, displayHeight/2);
+  resumee.position(displayWidth/2-38, displayHeight/2-30);
   jumpTo.position(displayWidth/2-40, displayHeight/2+ 90);
   rul.position(displayWidth/2-20, displayHeight/2);
   sto.position(displayWidth/2-20, displayHeight/2-40);
