@@ -1142,7 +1142,7 @@ function draw()
   SSoundOOn.position(displayWidth/2, displayHeight/2);
   SSoundOOff.position(displayWidth/2, displayHeight/2);
   resumee.position(displayWidth/2+23, displayHeight/2-30);
-  jumpTo.position(displayWidth/2-35, displayHeight/2+ 90);
+  jumpTo.position(displayWidth/2-40, displayHeight/2+ 90);
   rul.position(displayWidth/2+49, displayHeight/2);
   sto.position(displayWidth/2+50, displayHeight/2-40);
   pla.position(displayWidth/2+50, displayHeight/2+40);
@@ -1665,7 +1665,7 @@ function draw()
     textSize(16);
     textFont("Courier new");
     fill("#02F702");
-    text("select game difficulty", 181, 375);
+    text("select game difficulty", 180, 373);
     pop();
     jumpTo.hide();
     baack.hide();
