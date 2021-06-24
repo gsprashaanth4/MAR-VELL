@@ -316,7 +316,7 @@ function setup()
   rlls = [];
 
   //gameState defining.......
-  gameState = INTRO2;  
+  gameState = INTRO1;  
 
   //demo pieces for gameState- RULES.......
   sDemo = createSprite(600,70*1);
@@ -1136,9 +1136,9 @@ function draw()
   enter.position(displayWidth/2-30, displayHeight/2+ 50);
   startNext.position(920,700);
   settingsss.position(900,60);
-  MMedium.position(displayWidth/2+40, displayHeight/2);
-  EEasy.position(displayWidth/2+50, displayHeight/2-40);
-  HHard.position(displayWidth/2+50, displayHeight/2+40);
+  MMedium.position(displayWidth/2+50, displayHeight/2);
+  EEasy.position(displayWidth/2+60, displayHeight/2-40);
+  HHard.position(displayWidth/2+60, displayHeight/2+40);
   SSoundOOn.position(displayWidth/2, displayHeight/2);
   SSoundOOff.position(displayWidth/2, displayHeight/2);
   resumee.position(displayWidth/2+23, displayHeight/2-30);
