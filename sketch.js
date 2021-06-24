@@ -3506,7 +3506,7 @@ function draw()
     if(difficulty !== "easy")
     {
       sv5.hover();
-    }
+    } 
 
     for(var i = 0 ; i<bombs.length ; i++)
     {
