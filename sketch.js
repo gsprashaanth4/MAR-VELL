@@ -1142,7 +1142,7 @@ function draw()
   SSoundOOn.position(displayWidth/2, displayHeight/2);
   SSoundOOff.position(displayWidth/2, displayHeight/2);
   resumee.position(displayWidth/2+23, displayHeight/2-30);
-  jumpTo.position(displayWidth/2-57, displayHeight/2+ 90);
+  jumpTo.position(displayWidth/2-37, displayHeight/2+ 90);
   rul.position(displayWidth/2+49, displayHeight/2);
   sto.position(displayWidth/2+50, displayHeight/2-40);
   pla.position(displayWidth/2+50, displayHeight/2+40);
