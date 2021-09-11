@@ -2783,7 +2783,6 @@ function draw()
     } 
   
     bombs.push(bomB);
-    setTimeout(() => {bombs.pop(bomB);},1500);
     if(moo === "on" && moo !== "off")
     {
       bombThrow.play();
@@ -2795,7 +2794,6 @@ function draw()
   {
     var bomB2 = new bomBS(spr1.body.position.x, spr1.body.position.y, 5);
     bombs2.push(bomB2);
-    setTimeout(() => {bombs2.pop(bomB2);},1500);
     dpoo = 1;
     if(moo === "on" && moo !== "off")
     {
@@ -3784,11 +3782,7 @@ function draw()
   {
     Matter.Body.applyForce(sv1.body, spr1.body.position, {x: sddx1/9000 , y: sddy1/9000});
     rL = new roboLaser(sv1.body.position.x, sv1.body.position.y, 6);
-    rlls.push(rL);
-    if(rL.display())
-    {
-      setTimeout(()=>{rlls.pop(rL);}, 2000);
-    }  
+    rlls.push(rL);  
   }
   
   if(heroNearsV(spr1, sv2) && yesS2 !== 1)
@@ -3796,10 +3790,6 @@ function draw()
     Matter.Body.applyForce(sv2.body, spr1.body.position, {x: sddx2/9000 , y: sddy2/9000});
     rL = new roboLaser(sv2.body.position.x, sv2.body.position.y, 6);
     rlls.push(rL);
-    if(rL.display())
-    {
-      setTimeout(()=>{rlls.pop(rL);}, 2000);
-    }  
   }
   
   if(heroNearsV(spr1, sv3) && yesS3 !== 1)
@@ -3807,10 +3797,6 @@ function draw()
     Matter.Body.applyForce(sv3.body, spr1.body.position, {x: sddx3/9000 , y: sddy3/9000});
     rL = new roboLaser(sv3.body.position.x, sv3.body.position.y, 6);
     rlls.push(rL);
-    if(rL.display())
-    {
-      setTimeout(()=>{rlls.pop(rL);}, 2000);
-    }  
   }
   
   if(heroNearsV(spr1, sv4) && yesS4 !== 1)
@@ -3818,21 +3804,13 @@ function draw()
     Matter.Body.applyForce(sv4.body, spr1.body.position, {x: sddx4/9000 , y: sddy4/9000});
     rL = new roboLaser(sv4.body.position.x, sv4.body.position.y, 6);
     rlls.push(rL);
-    if(rL.display())
-    {
-      setTimeout(()=>{rlls.pop(rL);}, 2000);
-    }  
   }
   
   if(heroNearsV(spr1, sv5) && yesS5 !== 1)
   {
     Matter.Body.applyForce(sv5.body, spr1.body.position, {x: sddx5/9000 , y: sddy5/9000});
     rL = new roboLaser(sv4.body.position.x, sv4.body.position.y, 6);
-    rlls.push(rL);
-    if(rL.display())
-    {
-      setTimeout(()=>{rlls.pop(rL);}, 2000);
-    }  
+    rlls.push(rL); 
   }
   
   if(secondsOnes === 0 && secondsTens === 0)
