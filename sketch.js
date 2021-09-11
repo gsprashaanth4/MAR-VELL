@@ -165,7 +165,6 @@ var title;
 var enter;
 var nameInput;
 var startNext;
-var restartt;
 
 var playerName;
 
@@ -514,7 +513,6 @@ function setup()
   SSoundOOn = createButton('Turn Off Sounds');
   SSoundOOff = createButton('Turn On Sounds');
   resumee = createButton('Resume');
-  restartt = createButton('Restart');
   jumpTo = createButton('Jump to...');
   sto = createButton('story');
   rul = createButton('rules');
@@ -1147,7 +1145,6 @@ function draw()
   pla.position(displayWidth/2-20, displayHeight/2+40);
   baack.position(920,700);
   playy.position(920,700);
-  restartt.position(displayWidth/2-45, displayHeight/2+30);
   
 
   if(gameState === INTRO1)
