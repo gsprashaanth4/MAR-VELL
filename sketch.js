@@ -1,3 +1,5 @@
+
+
 // This is G.S.Prashaanth's self designed game - namely: MAR-VELL.
 // All ideas of this game is indegeniously developed, obtaining some of them with collaboration with my teacher - nithya kumaraguru ma'am
 // this game is structurally based on the Matter.js 2d rigid body physics engine. 
@@ -13,6 +15,7 @@ var STORY2 = 22;
 var SETTINGSS = 2002;
 var DIFFISELECT = 2005;
 var JUMPTOO = 2008;
+var ASKK = 2010;
 
 var gameState = PLAY;
 
@@ -96,6 +99,9 @@ var detw;
 var ddx;
 var ddy;
 
+var jOffx = 0;
+var jOffy = 0;
+
 var prizX = 200;
 var prizY = 200;
 
@@ -165,6 +171,7 @@ var title;
 var enter;
 var nameInput;
 var startNext;
+var restartt;
 
 var playerName;
 
@@ -250,6 +257,10 @@ var scoreReduce = 0;
 var baack;
 var playy;
 
+var winImg;
+
+var mennu;
+var windo;
 
 function preload()
 {
@@ -281,12 +292,13 @@ function preload()
   cut = loadSound("laserh2.mp3");
   pTouch = loadSound("ptouch.mp3");
   pdimg = loadImage("lander111r.png");
+  winImg = loadImage("bgwrWrr.png");
   lastExplodeImg = loadAnimation("burst11r.png", "burst12r.png", "burst13r.png", "burst14r.png", "burst15r.png");
 }
 
 function setup()
 {
-  canvas = createCanvas(714,714);
+  canvas = createCanvas(1114,650);
 
   engine = Engine.create();
   world = engine.world;  
@@ -294,6 +306,10 @@ function setup()
   bgg = createSprite(714/2,714/2);
   bgg.addImage(bgImg);
   bgg.visible = false;
+
+  jS = createButton('jss');
+  jS.position(width/2-405, height/2-290);
+  jS.show();
 
   finale = 0;
   p1d = 0;
@@ -312,10 +328,12 @@ function setup()
 
   bombs = [];
   bombs2 = [];
+  bombsSense = [];
+  bombs2Sense = [];
   rlls = [];
 
   //gameState defining.......
-  gameState = INTRO1;  
+  gameState = PLAY;  
 
   //demo pieces for gameState- RULES.......
   sDemo = createSprite(600,70*1);
@@ -406,8 +424,8 @@ function setup()
   vml48 = new sprBorder(663,306+25,6,52);
   vml49 = new sprBorder(663,459+25,6,52*3);
   vml50 = new sprBorder(663,612+25,6,52);
-  vml51 = new sprBorder(0,height/2,6,718);
-  vml52 = new sprBorder(714,height/2,6,718);
+  vml51 = new sprBorder(0,height/2+31,6,718);
+  vml52 = new sprBorder(714,height/2+31,6,718);
 
   //horizontal mark-up lines:
 
@@ -451,16 +469,16 @@ function setup()
   hml38 = new sprBorder1(663+24,612,54,6);
   hml39 = new sprBorder1(153+27,663,51.5*5,6);
   hml40 = new sprBorder1(510,663,54*2,6);
-  hml41 = new sprBorder1(width/2,0,718,6);
-  hml42 = new sprBorder1(width/2,714,718,6);
+  hml41 = new sprBorder1(width/2-200,0,718,6);
+  hml42 = new sprBorder1(width/2-200,714,718,6);
 
   //major barriers:
 
-  hhml41 = new sprBorder(width/2,-71,1000,150);
-  hhml42 = new sprBorder(width/2,785,1000,150);
+  hhml41 = new sprBorder(width/2-200,-71,1000,150);
+  hhml42 = new sprBorder(width/2-200,785,1000,150);
 
-  vvml51 = new sprBorder(-71,height/2,150,1000);
-  vvml52 = new sprBorder(785,height/2,150,1000);
+  vvml51 = new sprBorder(-71,height/2+30,150,1000);
+  vvml52 = new sprBorder(785,height/2+30,150,1000);
 
   p1 = new Prize(382, 690, 17);
 
@@ -510,8 +528,8 @@ function setup()
   EEasy = createButton('Easy');
   MMedium = createButton('Medium');
   HHard = createButton('Hard');
-  SSoundOOn = createButton('Turn Off Sounds');
-  SSoundOOff = createButton('Turn On Sounds');
+  SSoundOOn = createButton('Turn On Sounds');
+  SSoundOOff = createButton('Turn Off Sounds');
   resumee = createButton('Resume');
   jumpTo = createButton('Jump to...');
   sto = createButton('story');
@@ -519,6 +537,10 @@ function setup()
   pla = createButton('play');
   baack = createButton('Back');
   playy = createButton('Play');
+  restartt = createButton('restart');
+  mennu = createButton('menu');
+  nooo = createButton('No');
+  yesss = createButton('Yes');
 
   //shock-plates...........
   o1 = createSprite(200,305, 77, 10);
@@ -601,11 +623,11 @@ function setup()
   }
   
   //droids' creation.........
-  sv1 = new sVillain(door.position.x, door.position.y-30, 14);
-  sv2 = new sVillain(door.position.x, door.position.y-30, 14);
-  sv3 = new sVillain(door.position.x, door.position.y-30, 14);
-  sv4 = new sVillain(door.position.x, door.position.y-30, 14);
-  sv5 = new sVillain(door.position.x, door.position.y-30, 14);
+  sv1 = new sVillain(door.x, door.y-30, 14);
+  sv2 = new sVillain(door.x, door.y-30, 14);
+  sv3 = new sVillain(door.x, door.y-30, 14);
+  sv4 = new sVillain(door.x, door.y-30, 14);
+  sv5 = new sVillain(door.x, door.y-30, 14);
 
   Matter.Body.setPosition(sv1.body, {x: door.x, y: door.y});
   Matter.Body.setPosition(sv2.body, {x: door.x, y: door.y});
@@ -1118,7 +1140,14 @@ function setup()
    lastExplode.visible = false;
    lastExplode.frameDelay = 2;
    lastExplode.scale = 1;
-  
+
+   dialogB = createSprite(width/2, height/2 - 100, 400,250);
+
+    windo = new Windo();
+    Matter.World.remove(world, windo.body);
+
+    joi = new Joyy();
+    Matter.World.remove(world, joi.body);
 }
 
 function draw()
@@ -1127,45 +1156,208 @@ function draw()
   Engine.update(engine);
   drawSprites();
 
-  //positions for all buttons...
-  skip.position(920,700);
-  nameInput.position(displayWidth/2-90, displayHeight/2);
-  enter.position(displayWidth/2-30, displayHeight/2+ 50);
-  startNext.position(920,700);
-  settingsss.position(900, 60);
-  MMedium.position(displayWidth/2+50, displayHeight/2);
-  EEasy.position(displayWidth/2+60, displayHeight/2-40);
-  HHard.position(displayWidth/2+60, displayHeight/2+40);
-  SSoundOOn.position(displayWidth/2-65, displayHeight/2);
-  SSoundOOff.position(displayWidth/2-65, displayHeight/2);
-  resumee.position(displayWidth/2-40, displayHeight/2-30);
-  jumpTo.position(displayWidth/2-40, displayHeight/2+ 90);
-  rul.position(displayWidth/2-20, displayHeight/2);
-  sto.position(displayWidth/2-20, displayHeight/2-40);
-  pla.position(displayWidth/2-20, displayHeight/2+40);
-  baack.position(920,700);
-  playy.position(920,700);
+  //jOffx = 500 + spr1.body.position.x;
+  //jOffy = 100 + spr1.body.position.y;
+
+  //jOff = Math.sqrt(((500-spr1.body.position.x)*(500-spr1.body.position.x))+((100-spr1.body.position.y)*(100-spr1.body.position.y)))
+  jOffx = 500 - spr1.body.position.x;
+  jOffy = 100 - spr1.body.position.y;
+
+  //Matter.Body.setPosition(windo.body ,{x: spr1.body.position.x , y: spr1.body.position.y});
   
+
+  //positions for all buttons...
+  skip.position(975,700);
 
   if(gameState === INTRO1)
   {
-    push();
-    textSize(16);
-    textFont("Courier new");
-    fill("#02F702");
-    text("Please be in fullscreen for better experience, press F11", 90, 80);
-    pop();
-    jumpTo.hide();
-    rul.hide();
-    baack.hide();
-    playy.hide();
-    sto.hide();
-    pla.hide();
+    skip.show();
+  }else if(gameState !== INTRO1)
+  {
+    skip.hide();
+  }
+  
+  nameInput.position(width/2-90, height/2);
+  enter.position(width/2-30, height/2+ 50);
+
+  startNext.position(920,700);
+  settingsss.position(900, 60);
+
+  if(gameState === START)
+  {
+    startNext.show();
+  }else if(gameState !== START)
+  {
+    startNext.hide();
+  }
+
+  if(gameState === PLAY)
+  {
+    settingsss.show();
+    timeer.display();
+  }else if(gameState !== PLAY)
+  {
+    settingsss.hide();
+    timeer.hiide();
     timeer.hideer();
-    resumee.hide();
+  }
+
+  if(gameState === PLAY || gameState === SETTINGSS || gameState === ASKK)
+  {
+    bgg.visible = true;
+  }else
+  {
+    bgg.visible = false;
+  }
+
+  if(gameState === PLAY && finale === 0)
+  {
+    timeer.hiide();
+    timeer.showw();
+  }else if(gameState === PLAY && finale === 1)
+  {
+    timeer.hideer();
+    timeer.shoow();
+    timeer.showw();
+  }
+
+  if(gameState === SETTINGSS || gameState === DIFFISELECT)
+  {
+    SSoundOOff.show();
+    SSoundOOn.show();
+  }else if(gameState !== SETTINGSS || gameState !== DIFFISELECT)
+  {
     SSoundOOff.hide();
     SSoundOOn.hide();
-    bgC = rgb(0,0,0);
+  }
+
+  if(gameState === RULES)
+  {
+    playy.show();
+  }else if(gameState !== RULES)
+  {
+    playy.hide();
+  }
+
+  if(gameState === JUMPTOO)
+  {
+    pla.show();
+    sto.show();
+    rul.show();
+    baack.show();
+  }else if(gameState !== JUMPTOO)
+  {
+    pla.hide();
+    sto.hide();
+    rul.hide();
+    baack.hide();
+  }
+
+  if(gameState === INTRO2)
+  {
+    enter.show();
+    jumpTo.show();
+    nameInput.show();
+  }else if(gameState !== INTRO2)
+  {
+    enter.hide();
+    jumpTo.hide();
+    nameInput.hide();
+  }
+
+  MMedium.position(width/2+50, height/2);
+  EEasy.position(width/2+60, height/2-40);
+  HHard.position(width/2+60, height/2+40);
+
+  if(gameState === SETTINGSS)
+  {
+    SSoundOOn.position(width/2-65, height/2);
+    SSoundOOff.position(width/2-65, height/2);
+    resumee.show();
+  }else if(gameState !== SETTINGSS)
+  {
+    SSoundOOn.position(width/2-65, height/2);
+    SSoundOOff.position(width/2-65, height/2);
+    resumee.hide();
+  }
+
+  if(gameState === DIFFISELECT)
+  {
+    SSoundOOn.position(width/2-65, height/2);
+    SSoundOOff.position(width/2-65, height/2);
+
+    MMedium.show();
+    EEasy.show();
+    HHard.show();
+
+  }else if(gameState !== DIFFISELECT)
+  {
+    SSoundOOn.position(width/2-65, height/2);
+    SSoundOOff.position(width/2-65, height/2);
+
+    MMedium.hide();
+    EEasy.hide();
+    HHard.hide();
+
+  }
+
+  if(gameState === ASKK)
+  {
+    dialogB.visible = true;
+    yesss.show();
+    nooo.show();
+  }else if(gameState !== ASKK)
+  {
+    dialogB.visible = false;
+    yesss.hide();
+    nooo.hide();
+  }
+
+  if(gameState === SETTINGSS || gameState === END)
+  {
+    mennu.show();
+    restartt.show();
+  }else if(gameState !== SETTINGSS || gameState !== END)
+  {
+    mennu.hide();
+    restartt.hide();
+  }
+
+  resumee.position(width/2-40, height/2-30);
+  jumpTo.position(width/2-40, height/2+ 90);
+
+  rul.position(width/2-20, height/2);
+  sto.position(width/2-20, height/2-40);
+  pla.position(width/2-20, height/2+40);
+
+  baack.position(920,700);
+  playy.position(920,700);
+
+
+  if(gameState === END)
+  {
+    restartt.position(width/2-45, height/2+30);
+    mennu.position(width/2-45, height/2+30);
+  }else if(gameState !== END)
+  {
+    restartt.position(width/2-45, height/2+60);
+    mennu.position(width/2-45, height/2+30);
+  }
+
+  if(gameState === RULES)
+  {
+    vDemo.visible = true;
+    svDemo.visible = true;
+    sDemo.visible = true;
+    rLDemo.visible = true;
+    b1Demo.visible = true;
+    b2Demo.visible = true;
+    teleDemo.visible = true;
+    shockDemo.visible = true;
+    PDdemo.visible = true;
+    sw.visible = true;
+  }else if(gameState !== RULES)
+  {
     vDemo.visible = false;
     svDemo.visible = false;
     sDemo.visible = false;
@@ -1176,14 +1368,166 @@ function draw()
     shockDemo.visible = false;
     PDdemo.visible = false;
     sw.visible = false;
-    settingsss.hide();
-    nameInput.hide();
-    enter.hide();
-    MMedium.hide();
-    EEasy.hide();
-    HHard.hide();
-     
-    startNext.hide();
+  }
+
+  if(gameState !== INTRO1)
+  {
+    logo.visible = false;
+    intro.visible = false;
+    sw.visible = false;
+  }
+
+  v1.body.position.x = v1.body.position.x;
+  v2.body.position.x = v2.body.position.x;
+  v3.body.position.x = v3.body.position.x;
+  v4.body.position.x = v4.body.position.x;
+  v5.body.position.x = v5.body.position.x;
+  v6.body.position.x = v6.body.position.x;
+  v7.body.position.x = v7.body.position.x;
+  v8.body.position.x = v8.body.position.x;
+  v9.body.position.x = v9.body.position.x;
+  v10.body.position.x = v10.body.position.x;
+  v11.body.position.x = v11.body.position.x;
+  v12.body.position.x = v12.body.position.x;
+  v13.body.position.x = v13.body.position.x;
+  v14.body.position.x = v14.body.position.x;
+  v15.body.position.x = v15.body.position.x;
+  v16.body.position.x = v16.body.position.x;
+  v17.body.position.x = v17.body.position.x;
+  v18.body.position.x = v18.body.position.x;
+  v19.body.position.x = v19.body.position.x;  
+  v20.body.position.x = v20.body.position.x;
+
+  v1.body.position.y = v1.body.position.y;
+  v2.body.position.y = v2.body.position.y;
+  v3.body.position.y = v3.body.position.y;
+  v4.body.position.y = v4.body.position.y;
+  v5.body.position.y = v5.body.position.y;
+  v6.body.position.y = v6.body.position.y;
+  v7.body.position.y = v7.body.position.y;
+  v8.body.position.y = v8.body.position.y;
+  v9.body.position.y = v9.body.position.y;
+  v10.body.position.y = v10.body.position.y;
+  v11.body.position.y = v11.body.position.y;
+  v12.body.position.y = v12.body.position.y;
+  v13.body.position.y = v13.body.position.y;
+  v14.body.position.y = v14.body.position.y;
+  v15.body.position.y = v15.body.position.y;
+  v16.body.position.y = v16.body.position.y;
+  v17.body.position.y = v17.body.position.y;
+  v18.body.position.y = v18.body.position.y;
+  v19.body.position.y = v19.body.position.y;  
+  v20.body.position.y = v20.body.position.y;
+
+
+  sv1.body.position.x = sv1.body.position.x;
+  sv2.body.position.x = sv2.body.position.x;
+  sv3.body.position.x = sv3.body.position.x;
+  sv4.body.position.x = sv4.body.position.x;
+  sv5.body.position.x = sv5.body.position.x;
+
+  sv1.body.position.y = sv1.body.position.y;
+  sv2.body.position.y = sv2.body.position.y;
+  sv3.body.position.y = sv3.body.position.y;
+  sv4.body.position.y = sv4.body.position.y;
+  sv5.body.position.y = sv5.body.position.y;
+
+  p1.body.position.x = p1.body.position.x;
+  p1.body.position.y = p1.body.position.y;
+
+/*
+  px1 = p1.body.position.x - v1.body.position.x;
+  py1 = p1.body.position.y - v1.body.position.y;
+  
+  px2 = p1.body.position.x - v2.body.position.x;
+  py2 = p1.body.position.y - v2.body.position.y;
+  
+  px3 = p1.body.position.x - v3.body.position.x;
+  py3 = p1.body.position.y - v3.body.position.y;
+  
+  px4 = p1.body.position.x - v4.body.position.x;
+  py4 = p1.body.position.y - v4.body.position.y;
+  
+  px5 = p1.body.position.x - v5.body.position.x;
+  py5 = p1.body.position.y - v5.body.position.y;
+  
+  px6 = p1.body.position.x - v6.body.position.x;
+  py6 = p1.body.position.y - v6.body.position.y;
+  
+  px7 = p1.body.position.x - v7.body.position.x;
+  py7 = p1.body.position.y - v7.body.position.y;
+  
+  px8 = p1.body.position.x - v8.body.position.x;
+  py8 = p1.body.position.y - v8.body.position.y;
+  
+  px9 = p1.body.position.x - v9.body.position.x;
+  py9 = p1.body.position.y - v9.body.position.y;
+  
+  px10 = p1.body.position.x - v10.body.position.x;
+  py10 = p1.body.position.y - v10.body.position.y;
+  
+  px11 = p1.body.position.x - v11.body.position.x;
+  py11 = p1.body.position.y - v11.body.position.y;
+  
+  px12 = p1.body.position.x - v12.body.position.x;
+  py12 = p1.body.position.y - v12.body.position.y;
+  
+  px13 = p1.body.position.x - v13.body.position.x;
+  py13 = p1.body.position.y - v13.body.position.y;
+  
+  px14 = p1.body.position.x - v14.body.position.x;
+  py14 = p1.body.position.y - v14.body.position.y;
+  
+  px15 = p1.body.position.x - v15.body.position.x;
+  py15 = p1.body.position.y - v15.body.position.y;
+  
+  px16 = p1.body.position.x - v16.body.position.x;
+  py16 = p1.body.position.y - v16.body.position.y;
+  
+  px17 = p1.body.position.x - v17.body.position.x;
+  py17 = p1.body.position.y - v17.body.position.y;
+  
+  px18 = p1.body.position.x - v18.body.position.x;
+  py18 = p1.body.position.y - v18.body.position.y;
+  
+  px19 = p1.body.position.x - v19.body.position.x;
+  py19 = p1.body.position.y - v19.body.position.y;
+  
+  px20 = p1.body.position.x - v20.body.position.x;
+  py20 = p1.body.position.y - v20.body.position.y;
+
+
+  Matter.Body.applyForce(v1.body, p1.body.position, {x: px1/8000 , y: py1/8000});
+  Matter.Body.applyForce(v2.body, p1.body.position, {x: px2/8000 , y: py2/8000});
+  Matter.Body.applyForce(v3.body, p1.body.position, {x: px3/8000 , y: py3/8000});
+  Matter.Body.applyForce(v4.body, p1.body.position, {x: px4/8000 , y: py4/8000});
+  Matter.Body.applyForce(v5.body, p1.body.position, {x: px5/8000 , y: py5/8000});
+  Matter.Body.applyForce(v6.body, p1.body.position, {x: px6/8000 , y: py6/8000});
+  Matter.Body.applyForce(v7.body, p1.body.position, {x: px7/8000 , y: py7/8000});
+  Matter.Body.applyForce(v8.body, p1.body.position, {x: px8/8000 , y: py8/8000});
+  Matter.Body.applyForce(v9.body, p1.body.position, {x: px9/8000 , y: py9/8000});
+  Matter.Body.applyForce(v10.body, p1.body.position, {x: px10/8000 , y: py10/8000});
+  Matter.Body.applyForce(v11.body, p1.body.position, {x: px11/8000 , y: py11/8000});
+  Matter.Body.applyForce(v12.body, p1.body.position, {x: px12/8000 , y: py12/8000});
+  Matter.Body.applyForce(v13.body, p1.body.position, {x: px13/8000 , y: py13/8000});
+  Matter.Body.applyForce(v14.body, p1.body.position, {x: px14/8000 , y: py14/8000});
+  Matter.Body.applyForce(v15.body, p1.body.position, {x: px15/8000 , y: py15/8000});
+  Matter.Body.applyForce(v16.body, p1.body.position, {x: px16/8000 , y: py16/8000});
+  Matter.Body.applyForce(v17.body, p1.body.position, {x: px17/8000 , y: py17/8000});
+  Matter.Body.applyForce(v18.body, p1.body.position, {x: px18/8000 , y: py18/8000});
+  Matter.Body.applyForce(v19.body, p1.body.position, {x: px19/8000 , y: py19/8000});
+  Matter.Body.applyForce(v20.body, p1.body.position, {x: px20/8000 , y: py20/8000});
+ */ 
+
+  
+  if(gameState === INTRO1)
+  {
+    push();
+    textSize(16);
+    textFont("Courier new");
+    fill("#02F702");
+    text("Please be in fullscreen for better experience, press F11", 90, 80);
+    pop();
 
     if(frameCount % 0.5 === 0 && intro.rotation > 0)
     {
@@ -1238,42 +1582,13 @@ function draw()
 
   if(gameState === INTRO2)
   {
-    jumpTo.show();
-    rul.hide();
-    sto.hide();
-    pla.hide();
-    resumee.hide();
-    SSoundOOff.hide();
-    playy.hide();
-    SSoundOOn.hide();
-    bgC = "rgb(0,0,0)"
-    vDemo.visible = false;
-    svDemo.visible = false;
-    sDemo.visible = false;
-    rLDemo.visible = false;
-    b1Demo.visible = false;
-    baack.hide();
-    b2Demo.visible = false;
-    teleDemo.visible = false;
-    shockDemo.visible = false;
-    PDdemo.visible = false;
-    sw.visible = false;
-    logo.visible = false;
-    intro.visible = false;
-    skip.hide();
-    MMedium.hide();
-    EEasy.hide();
-    HHard.hide();
-    startNext.hide();
-    settingsss.hide();
-    nameInput.show();
-    enter.show();
-    jumpTo.show();
 
     textSize(20);
     textFont("Courier new");
     fill("#02F702");
-    text("enter you're name here_", displayWidth/2-410, displayHeight/2-60);
+    text("enter you're name here_", width/2-410, height/2-60);
+
+    bgC = rgb(0,0,0);
 
     enter.mousePressed(()=>{
       if(moo === "on" && moo !== "off")
@@ -1291,48 +1606,11 @@ function draw()
       }
       gameState = JUMPTOO;
     });
-
   }
 
   if(gameState === JUMPTOO)
   {
-    jumpTo.hide();
-    nameInput.hide();
-    startNext.hide();
-    enter.hide();
-    baack.show();
-    rul.show();
-    sto.show();
-    pla.show();
-    vDemo.visible = false;
-    svDemo.visible = false;
-    sDemo.visible = false;
-    rLDemo.visible = false;
-    b1Demo.visible = false;
-    b2Demo.visible = false;
-    teleDemo.visible = false;
-    shockDemo.visible = false;
-    PDdemo.visible = false;
-    bgC = rgb(0,0,0);
-    MMedium.hide();
-    EEasy.hide();
-    HHard.hide();
-    sw.visible = false;
-    logo.visible = false;
-    skip.position(980,700);
-    nameInput.hide();
-    enter.hide();
-    startNext.hide();
-    settingsss.hide();
-    MMedium.hide();
-    EEasy.hide();
-    HHard.hide();
-    SSoundOOn.hide();
-    SSoundOOff.hide();
-    resumee.hide();
-    jumpTo.hide();
-    skip.hide();
-
+  
     push();
     textSize(16);
     textFont("Courier new");
@@ -1379,37 +1657,6 @@ function draw()
 
   if(gameState === START)
   {
-    jumpTo.hide();
-    rul.hide();
-    playy.hide();
-    sto.hide();
-    pla.hide();
-    baack.hide();
-    resumee.hide();
-    SSoundOOff.hide();
-    SSoundOOn.hide();
-    vDemo.visible = false;
-    svDemo.visible = false;
-    sDemo.visible = false;
-    rLDemo.visible = false;
-    b1Demo.visible = false;
-    b2Demo.visible = false;
-    teleDemo.visible = false;
-    shockDemo.visible = false;
-    PDdemo.visible = false;
-    bgC = rgb(0,0,0);
-    MMedium.hide();
-    EEasy.hide();
-    HHard.hide();
-     
-    sw.visible = false;
-    logo.visible = false;
-    intro.visible = false;
-    enter.hide();
-    nameInput.hide();
-    settingsss.hide();
-    skip.hide();
-    startNext.hide();
 
     if(frameCount % 15 === 0 && clicker !== 10)
     {
@@ -1528,24 +1775,6 @@ function draw()
 
   if(gameState === RULES)
   {
-    jumpTo.hide();
-    rul.hide();
-    sto.hide();
-    playy.hide();
-    pla.hide();
-    baack.hide();
-    resumee.hide();
-    SSoundOOff.hide();
-    SSoundOOn.hide();
-    bgC = rgb(0,0,0);
-    skip.hide();
-    startNext.hide();
-    nameInput.hide();
-    enter.hide();
-    settingsss.hide();
-    MMedium.hide();
-    EEasy.hide();
-    HHard.hide();
     
     if(frameCount % 15 === 0 && intime !== 10)
     {
@@ -1656,6 +1885,17 @@ function draw()
     });
   }
 
+  if(gameState === ASKK)
+  {
+    yesss.mousePressed(()=>{
+      gameState = DIFFISELECT;
+    });
+
+    nooo.mousePressed(()=>{
+      gameState = SETTINGSS;
+    });
+  }
+
   if(gameState === DIFFISELECT)
   {
     push();
@@ -1664,87 +1904,51 @@ function draw()
     fill("#02F702");
     text("select game difficulty", 183, 373);
     pop();
-    jumpTo.hide();
-    baack.hide();
-    rul.hide();
-    sto.hide();
-    pla.hide();
-    SSoundOOff.hide();
-    playy.hide();
-    SSoundOOn.hide();
-    bgg.visible = true;
-    timeer.hideer();
-    settingsss.hide();
-    nameInput.hide();
-    skip.hide();
-    startNext.hide();
-    enter.hide();
-    resumee.hide();
-    EEasy.show();
-    MMedium.show();
-    HHard.show();
-    bgg.visible = false;
-    vDemo.visible = false;
-    svDemo.visible = false;
-    sDemo.visible = false;
-    rLDemo.visible = false;
-    b1Demo.visible = false;
-    b2Demo.visible = false;
-    teleDemo.visible = false;
-    shockDemo.visible = false;
-    PDdemo.visible = false;
 
     EEasy.mousePressed(()=>{
       difficulty = "easy";
-      gameState = PLAY;
+      reset();
     });
 
     HHard.mousePressed(()=>{
       difficulty = "hard";
-      gameState = PLAY;
+      reset();
     });
 
     MMedium.mousePressed(()=>{
       difficulty = "medium";
-      gameState = PLAY;
+      reset();
+    });
+
+    if(moo === "on")
+    {
+      SSoundOOff.show();
+      SSoundOOn.hide();
+    }else if(moo === "off")
+    {
+      SSoundOOff.hide();
+      SSoundOOn.show();
+    }
+
+    SSoundOOff.mousePressed(()=>{
+      moo = "off";
+    });
+
+    SSoundOOn.mousePressed(()=>{
+      moo = "on";
+      cliick.play();
     });
   }
 
   if(gameState === PLAY)
   {
-    jumpTo.hide();
-    rul.hide();
-    sto.hide();
-    pla.hide();
-    baack.hide();
-   SSoundOOff.hide();
-   SSoundOOn.hide();
-   bgg.visible = true;
-   timeer.showw();
-   timeer.display();
-   settingsss.show();
-   nameInput.hide();
-   skip.hide();
-   startNext.hide();
-   enter.hide();
-   resumee.hide();
-   EEasy.hide();
-   MMedium.hide();
-   HHard.hide();
-   
    oo1.position.x = spr1.body.position.x;
    oo1.position.y = spr1.body.position.y;
-  
+
+
+   bgg.visible = true;
+
    //function to display all the objects:
-   sw.visible = false;
-   logo.visible = false;
-   intro.visible = false;
-   vDemo.visible = false;
-   svDemo.visible = false;
-   sDemo.visible = false;
-   rLDemo.visible = false;
-   b1Demo.visible = false;
-   b2Demo.visible = false;
    
    bgC = rgb(0,0,0);
    x1 = spr1.body.position.x;
@@ -1824,15 +2028,7 @@ function draw()
        secondsOnes = 9;
      },1000);
    }
-  
-  
-   startNext.mousePressed(()=>{
-     if(moo === "on" && moo !== "off")
-     {
-         cliick.play();
-     }
-     gameState = SETTINGSS;
-   });
+
   
   //displayin all the slabs.....
 
@@ -1846,86 +2042,45 @@ function draw()
    vml8.display();
    vml9.display();
    vml10.display();
-   vml10.display();
-   vml11.display();
    vml11.display();
    vml12.display();
-   vml12.display();
-   vml13.display();
    vml13.display();
    vml14.display();
-   vml14.display();
-   vml15.display();
    vml15.display();
    vml16.display();
-   vml16.display();
-   vml17.display();
    vml17.display();
    vml18.display();
-   vml18.display();
-   vml19.display();
    vml19.display();
    vml20.display();
-   vml20.display();
-   vml21.display();
    vml21.display();
    vml22.display();
-   vml22.display();
-   vml23.display();
    vml23.display();
    vml24.display();
-   vml24.display();
-   vml25.display();
    vml25.display();
    vml26.display();
-   vml26.display();
-   vml27.display();
    vml27.display();
    vml28.display();
-   vml28.display();
-   vml29.display();
    vml29.display();
    vml30.display();
-   vml30.display();
-   vml31.display();
    vml31.display();
    vml32.display();
-   vml32.display();
-   vml33.display();
    vml33.display();
    vml34.display();
-   vml34.display();
-   vml35.display();
    vml35.display();
    vml36.display();
-   vml36.display();
-   vml37.display();
    vml37.display();
    vml38.display();
-   vml38.display();
-   vml39.display();
    vml39.display();
    vml40.display();
-   vml40.display();
-   vml41.display();
    vml41.display();
    vml42.display();
-   vml42.display();
-   vml43.display();
    vml43.display();
    vml44.display();
-   vml44.display();
-   vml45.display();
    vml45.display();
    vml46.display();
-   vml46.display();
-   vml47.display();
    vml47.display();
    vml48.display();
-   vml48.display();
    vml49.display();
-   vml49.display();
-   vml50.display();
    vml50.display();
    vml51.display();
    vml52.display();
@@ -1988,6 +2143,81 @@ function draw()
    v13.display();
    v14.display();
    v15.display();
+
+   windo.display();   
+
+   //joi.display();
+
+   windo.body.position.x = spr1.body.position.x;
+   windo.body.position.y = spr1.body.position.y;
+
+   if(mouseIsPressed && (mouseX-70)>joi.body.position.x-10 && (mouseX-70)<joi.body.position.x+10)
+   {
+      joi.body.position.x = mouseX-70 - jOffx*0.2;
+      joi.body.position.y = mouseY-260 - jOffy*0.3;
+   }else{
+      joi.body.position.x = windo.body.position.x-350;
+      joi.body.position.y = windo.body.position.y+300;
+   }
+
+  //joi.display();
+
+  push();
+  textSize(20);
+  strokeWeight(2);
+  fill("white");
+  text(Math.round(jOffx),200,200);
+  text(Math.round(jOffy),200,300);
+  pop();
+   
+  //if(mouseIsPressed && (mouseX-70)>windo.body.position.x-10 && (mouseX-70)<windo.body.position.x+10)
+  //{
+    //Matter.Body.applyForce(spr1.body, spr1.body.position, {x:-0.0005,y:0});
+  //}
+
+
+  var jox = mouseX-70 - jOffx+9//mouseX-70 - jOffx*0.2;
+  var joy = mouseY-240 - jOffy+10;
+  var disst = (Math.sqrt(((jox-spr1.body.position.x)*(jox-spr1.body.position.x))+((joy-spr1.body.position.y)*(joy-spr1.body.position.y))))
+
+  if(mouseIsPressed &&  disst < 200 && (mouseX-70 - jOffx+9)<spr1.body.position.x)
+  {
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:-0.0008,y:0});
+  }
+
+  if(mouseIsPressed &&  disst < 200 && (mouseX-70 - jOffx+9)>spr1.body.position.x)
+  {
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0.0008,y:0});
+  }
+
+  if(mouseIsPressed &&  disst < 200 && (mouseY-240 - jOffy+10)<spr1.body.position.y)
+  {
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:-0.003});
+  }
+
+  if(mouseIsPressed &&  disst < 200 && (mouseY-240 - jOffy+10)>spr1.body.position.y)
+  {
+    Matter.Body.applyForce(spr1.body, spr1.body.position, {x:0,y:0.00006});
+  }
+   
+
+   push();
+   strokeWeight(10);
+   if(disst > 200)
+   {
+      stroke("white");
+   }else
+   {
+      stroke("green");
+    }
+   line(mouseX-70 - jOffx+9 , mouseY-240 - jOffy+10, spr1.body.position.x, spr1.body.position.y);
+   //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x+100,windo.body.position.y);
+   //rect(windo.body.position.x, windo.body.position.y,20,20)
+   //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x,windo.body.position.y);
+   //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x,windo.body.position.y);
+   pop();
+
+   
 
    if(difficulty !== "easy")
    {
@@ -2056,7 +2286,8 @@ function draw()
    World.remove(world, sv2.body);
    World.remove(world, sv3.body);
    World.remove(world, sv4.body);
-   World.remove(world, sv5.body);  
+   World.remove(world, sv5.body);
+   
 
   //stating works for the game according to the difficulty level selected.....
 
@@ -2106,7 +2337,6 @@ function draw()
    {
      o1.velocityX = -5;
    }
-  
   
    if(o2.x < 300)
    {
@@ -2164,6 +2394,7 @@ function draw()
 
    //changing the gameState if the player touches the shock-plates..... 
 
+   /*
    if(oo1.isTouching(o1))
    {
      cut.play();
@@ -2200,15 +2431,8 @@ function draw()
      cut.play();
      gameState = END;
    }
-   
+   */
 
-   if(finale !== 1)
-   {
-     timeer.hiide();
-   }else
-   {
-     timeer.shoow();
-   }
   
   //code for changing the place of PD210 for every minute......
 
@@ -2751,6 +2975,9 @@ function draw()
   
   camera.x = spr1.body.position.x;
   camera.y = spr1.body.position.y;
+
+  //camera.x = windo.body.position.x;
+  //camera.y = windo.body.position.y;
   
   //to decide if to display either left or right facing charecters for the main player sprite: 
   // dsjrd = Decide Still Jump Run Direction.
@@ -2783,6 +3010,7 @@ function draw()
     } 
   
     bombs.push(bomB);
+    //setTimeout(() => {bombs.pop(bomB);},1500);
     if(moo === "on" && moo !== "off")
     {
       bombThrow.play();
@@ -2794,6 +3022,7 @@ function draw()
   {
     var bomB2 = new bomBS(spr1.body.position.x, spr1.body.position.y, 5);
     bombs2.push(bomB2);
+    //setTimeout(() => {bombs2.pop(bomB2);},1500);
     dpoo = 1;
     if(moo === "on" && moo !== "off")
     {
@@ -3409,17 +3638,17 @@ function draw()
 
   if(heroWin(p1, spr1))
   {
-    Matter.Body.setPosition(p1.body, {x:1000, y:1000});
+    setTimeout(()=>{ Matter.Body.setPosition(p1.body, {x: 1000 , y: 1000}) }, 100);
 
     if(scoreReduce === 0)
     {
-      score = score + ((secondsOnes*secondsTens)*1000);
+      score = score + ( (secondsTens+1)*200 )
     }else if(scoreReduce === 1)
     {
-      score = score + (((secondsOnes*secondsTens)*1000)/0.5);
+      score = score + ( ((secondsTens+1)*200)/0.5 )
     }else
     {
-      score = score + (((secondsOnes*secondsTens)*1000/scoreReduce));
+      score = score + ( ((secondsTens+1)*200)/scoreReduce )
     }
 
     if(moo === "on" && moo !== "off")
@@ -3447,7 +3676,6 @@ function draw()
       secondsOnes = 0;
       secondsTens = 4;
     }
-    World.remove(world, p1.body);
     p1d = 1;
     finale = 1;
   }
@@ -3782,7 +4010,11 @@ function draw()
   {
     Matter.Body.applyForce(sv1.body, spr1.body.position, {x: sddx1/9000 , y: sddy1/9000});
     rL = new roboLaser(sv1.body.position.x, sv1.body.position.y, 6);
-    rlls.push(rL);  
+    rlls.push(rL);
+    /*if(rL.display())
+    {
+      setTimeout(()=>{rlls.pop(rL);}, 2000);
+    }*/  
   }
   
   if(heroNearsV(spr1, sv2) && yesS2 !== 1)
@@ -3790,6 +4022,10 @@ function draw()
     Matter.Body.applyForce(sv2.body, spr1.body.position, {x: sddx2/9000 , y: sddy2/9000});
     rL = new roboLaser(sv2.body.position.x, sv2.body.position.y, 6);
     rlls.push(rL);
+    /*if(rL.display())
+    {
+      setTimeout(()=>{rlls.pop(rL);}, 2000);
+    }*/  
   }
   
   if(heroNearsV(spr1, sv3) && yesS3 !== 1)
@@ -3797,6 +4033,10 @@ function draw()
     Matter.Body.applyForce(sv3.body, spr1.body.position, {x: sddx3/9000 , y: sddy3/9000});
     rL = new roboLaser(sv3.body.position.x, sv3.body.position.y, 6);
     rlls.push(rL);
+    /*if(rL.display())
+    {
+      setTimeout(()=>{rlls.pop(rL);}, 2000);
+    }*/  
   }
   
   if(heroNearsV(spr1, sv4) && yesS4 !== 1)
@@ -3804,13 +4044,21 @@ function draw()
     Matter.Body.applyForce(sv4.body, spr1.body.position, {x: sddx4/9000 , y: sddy4/9000});
     rL = new roboLaser(sv4.body.position.x, sv4.body.position.y, 6);
     rlls.push(rL);
+    /*if(rL.display())
+    {
+      setTimeout(()=>{rlls.pop(rL);}, 2000);
+    }*/  
   }
   
   if(heroNearsV(spr1, sv5) && yesS5 !== 1)
   {
     Matter.Body.applyForce(sv5.body, spr1.body.position, {x: sddx5/9000 , y: sddy5/9000});
     rL = new roboLaser(sv4.body.position.x, sv4.body.position.y, 6);
-    rlls.push(rL); 
+    rlls.push(rL);
+    /*if(rL.display())
+    {
+      setTimeout(()=>{rlls.pop(rL);}, 2000);
+    }*/  
   }
   
   if(secondsOnes === 0 && secondsTens === 0)
@@ -3827,10 +4075,12 @@ function draw()
   if(oo1.isTouching(door))
   {
     winn = 1;
-    score = score + (((secondsOnes*secondsTens)*2)+1); 
+    score = score +  (secondsTens+1)*150
     gameState = END;
   }
   }
+  
+    
   }
 
   if(gameState === END)
@@ -3838,52 +4088,33 @@ function draw()
     timeer.hideer();
     timeer.hiide();
     door.visible = false;
+    lastExplode.visible = false;
+     
+    baack.hide();
+    logo.visible = false;
+    intro.visible = false;
+    bgg.visible = false;
+    o1.visible = false;
+    o2.visible = false;
+    o3.visible = false;
+    o4.visible = false;
+    o1v.visible = false;
+    o2v.visible = false;
+    o1.velocityX = 0;
+    o2.velocityX = 0;
+    o3.velocityX = 0;
+    o4.velocityX = 0;
+    o1v.velocityY = 0;
+    o2v.velocityY = 0;
+    bgC = rgb(0,0,0);
+    SSoundOOff.hide();
+    SSoundOOn.hide();
+    textFont('Courier new');
+    textSize(20);
+    fill("#02F702");
 
     if(winn === 0)
     {
-      lastExplode.visible = false;
-      resumee.hide();
-      SSoundOOff.hide();
-      SSoundOOn.hide();
-      bgC = rgb(0,0,0);
-      vDemo.visible = false;
-      svDemo.visible = false;
-      sDemo.visible = false;
-      rLDemo.visible = false;
-      b1Demo.visible = false;
-      b2Demo.visible = false;
-      sw.visible = false;
-      settingsss.hide();
-      nameInput.hide();
-      enter.hide();
-      MMedium.hide();
-      EEasy.hide();
-      HHard.hide();
-      startNext.hide();
-      skip.hide();
-      baack.hide();
-      logo.visible = false;
-      intro.visible = false;
-      bgg.visible = false;
-      o1.visible = false;
-      o2.visible = false;
-      o3.visible = false;
-      o4.visible = false;
-      o1v.visible = false;
-      o2v.visible = false;
-      o1.velocityX = 0;
-      o2.velocityX = 0;
-      o3.velocityX = 0;
-      o4.velocityX = 0;
-      o1v.velocityY = 0;
-      o2v.velocityY = 0;
-      bgC = rgb(0,0,0);
-      SSoundOOff.hide();
-      SSoundOOn.hide();
-      textFont('Courier new');
-      textSize(20);
-      fill("#02F702");
-  
       if(frameCount % 10 === 0 && lettC < 19)
       {
         lettC++;
@@ -3970,12 +4201,14 @@ function draw()
 
       if(lettC > 17)
       {
-          text("_", 130, 100);
+          restartt.show();
+          mennu.show();
       }
 
-      if(lettC > 18)
+      if(lettC < 17)
       {
-        text("Please refresh and use 'jump to' to play again_",50, 150);
+          restartt.hide();
+          mennu.hide();
       }
 
       camera.x = 714/2;
@@ -3985,26 +4218,6 @@ function draw()
   
     if(winn === 1)
     {
-      settingsss.hide();
-      bgg.visible = false;
-      o1.visible = false;
-      o2.visible = false;
-      o3.visible = false;
-      o4.visible = false;
-      o1v.visible = false;
-      o2v.visible = false;
-      o1.velocityX = 0;
-      o2.velocityX = 0;
-      o3.velocityX = 0;
-      o4.velocityX = 0;
-      o1v.velocityY = 0;
-      o2v.velocityY = 0;
-      bgC = rgb(0,0,0);
-      SSoundOOff.hide();
-      SSoundOOn.hide();
-      textSize(20);
-      fill("#02F702");
-  
       if(frameCount % 15 === 0 && lettC < 18)
       {
         lettC++;
@@ -4086,17 +4299,27 @@ function draw()
 
       if(lettC > 16)
       {
-          text("_",130, 100);
+          restartt.show();
+          mennu.show();
       }
-      
-      if(lettC > 17)
+
+      if(lettC < 16)
       {
-          text("Please refresh and use 'jump to' to play again_",50, 150);
+          restartt.hide();
+          mennu.hide();
       }
 
       camera.x = 714/2;
       camera.y = 714/2;
     }
+
+    restartt.mousePressed(()=>{
+      reset();
+    });
+
+    mennu.mousePressed(()=>{
+      gameState = DIFFISELECT;
+    });
   
   }
   
@@ -4106,6 +4329,8 @@ function draw()
     settingsss.hide();
     nameInput.hide();
     enter.hide();
+    mennu.show();
+    restartt.show();
     o1.visible = false;
     o2.visible = false;
     o3.visible = false;
@@ -4154,6 +4379,14 @@ function draw()
     resumee.mousePressed(()=>{
       gameState = PLAY;
     });
+
+    restartt.mousePressed(()=>{
+       reset();
+    });
+
+    mennu.mousePressed(()=>{
+      gameState = ASKK;
+    });
   }
 }
 
@@ -4161,7 +4394,12 @@ function draw()
 function detectNear(ob1, ob2)
 {
   //increasing the minus value will reduce the possibility of the detection between bombs and the villian robot.
-  if((Math.sqrt(((ob1.body.position.x - ob2.body.position.x)*(ob1.body.position.x - ob2.body.position.x)) + ((ob1.body.position.y - ob2.body.position.y)*(ob1.body.position.y - ob2.body.position.y)))) < ((ob1.radius + ob2.radius)-5))
+  if( (Math.sqrt( 
+    ( (ob1.body.position.x-ob2.body.position.x)*(ob1.body.position.x-ob2.body.position.x) )
+    +  
+    ( (ob1.body.position.y-ob2.body.position.y)*(ob1.body.position.y-ob2.body.position.y) )
+    ) ) < ( (ob1.radius + ob2.radius)+ 10)
+    )
   {
     return true;
   }else
@@ -4173,7 +4411,12 @@ function detectNear(ob1, ob2)
 function detectNearS(obs1, obs2)
 {
   //increasing the minus value will reduce the possibility of the detection between bombs and the villian robot.
-  if((Math.sqrt(((obs1.body.position.x - obs2.body.position.x)*(obs1.body.position.x - obs2.body.position.x)) + ((obs1.body.position.y - obs2.body.position.y)*(obs1.body.position.y - obs2.body.position.y)))) < ((obs1.radius + obs2.radius)-4))
+  if( (Math.sqrt( 
+    ( (obs1.body.position.x-obs2.body.position.x)*(obs1.body.position.x-obs2.body.position.x) )
+    +  
+    ( (obs1.body.position.y-obs2.body.position.y)*(obs1.body.position.y-obs2.body.position.y) )
+    ) ) < ( (obs1.radius + obs2.radius)-1 )
+    ) 
   {
     return true;
   }else
@@ -4228,4 +4471,707 @@ function obsDetect(rect1, rect2)
     return false;
   }
 }
+
+
+function reset()
+{
+  Matter.Body.setPosition(spr1.body, {x:500 , y:200});
+  score = 0;
+  minutesOnes = 0;
+  minutesTens = 0;
+  secondsOnes = 1;
+  secondsTens = 0;
+  p1d = 0;
+  lettC = 0;
+  finale = 0;
+  winn = 0;
+  lastExplode.scale = 20;
+  scoreReduce = 0;
+  gameState = PLAY;
+
+  var switchh = Math.round(random(1, 6));
+
+  switch(switchh)
+  {
+    case 1 :door.x = 690;           
+            door.y = 635;
+    break;
+
+    case 2 :door.x = 485;
+            door.y = 125;
+    break;
+
+    case 3 :door.x = 536;
+            door.y = 431;
+    break;
+
+    case 4 :door.x = 332;
+            door.y = 635;
+    break;
+
+    case 5 :door.x = 77;
+            door.y = 175;
+    break;
+
+    case 6 :door.x = 685;
+            door.y = 24;
+    break;
+
+    default : break;
+  }
+
+    Matter.Body.setPosition(sv1.body, {x: door.x+10 , y: door.y});
+    Matter.Body.setPosition(sv2.body, {x: door.x-10 , y: door.y});
+    Matter.Body.setPosition(sv3.body, {x: door.x , y: door.y});
+    Matter.Body.setPosition(sv4.body, {x: door.x , y: door.y-10});
+    Matter.Body.setPosition(sv5.body, {x: door.x , y: door.y+10});
+
+  if(yes1 === 1)
+  {
+    yes1 = 0;
+    v1.added();
+  }
+
+  if(yes2 === 1)
+  {
+    yes2 = 0;
+    v2.added();
+  }
+
+  if(yes3 === 1)
+  {
+    yes3 = 0;
+    v3.added();
+  }
+
+  if(yes4 === 1)
+  {
+    yes4 = 0;
+    v4.added();
+  }
+
+  if(yes5 === 1)
+  {
+    yes5 = 0;
+    v5.added();
+  }
+
+  if(yes6 === 1)
+  {
+    yes6 = 0;
+    v6.added();
+  }
+
+  if(yes7 === 1)
+  {
+    yes7 = 0;
+    v7.added();
+  }
+
+  if(yes8 === 1)
+  {
+    yes8 = 0;
+    v8.added();
+  }
+
+  if(yes9 === 1)
+  {
+    yes9 = 0;
+    v9.added();
+  }
+
+  if(yes10 === 1)
+  {
+    yes10 = 0;
+    v10.added();
+  }
+
+  if(yes11 === 1)
+  {
+    yes11 = 0;
+    v11.added();
+  }
+
+  if(yes12 === 1)
+  {
+    yes12 = 0;
+    v12.added();
+  }
+
+  if(yes13 === 1)
+  {
+    yes13 = 0;
+    v13.added();
+  }
+
+  if(yes14 === 1)
+  {
+    yes14 = 0;
+    v14.added();
+  }
+
+  if(yes15 === 1)
+  {
+    yes15 = 0;
+    v15.added();
+  }
+
+  if(yes16 === 1)
+  {
+    yes16 = 0;
+    v16.added();
+  }
+
+  if(yes17 === 1)
+  {
+    yes17 = 0;
+    v17.added();
+  }
+
+  if(yes18 === 1)
+  {
+    yes18 = 0;
+    v18.added();
+  }
+
+  if(yes19 === 1)
+  {
+    yes19 = 0;
+    v19.added();
+  }
+
+  if(yes20 === 1)
+  {
+    yes20 = 0;
+    v20.added();
+  }
+
+
+  if(yesS1 === 1)//
+  {
+    yesS1 = 0;
+    sv1.added();
+  }
+
+  if(yesS2 === 1)//
+  {
+    yesS2 = 0;
+    sv2.added();
+  }
+
+  if(yesS3 === 1)//
+  {
+    yesS3 = 0;
+    sv3.added();
+  }
+
+  if(yesS4 === 1)//
+  {
+    yesS4 = 0;
+    sv4.added();
+  }
+
+  if(yesS5 === 1)//
+  {
+    yesS5 = 0;
+    sv5.added();
+  }
+
+  var command = Math.round(random(1,10));
+
+  switch(command)
+  {
+    case 1 :if(p1.body.position.x !== 382)
+            {
+              Matter.Body.setPosition(p1.body, {x:382 ,y:690});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:26 ,y:80});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }
+    break;
+  
+    case 2 :if(p1.body.position.x !== 26)
+            {
+              Matter.Body.setPosition(p1.body, {x:26 ,y:80});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:689 ,y:333});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }
+    break;
+  
+    case 3 :if(p1.body.position.x !== 689)
+            {
+              Matter.Body.setPosition(p1.body, {x:689 ,y:333});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:280 ,y:435});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }
+    break;
+  
+    case 4 :if(p1.body.position.x !== 280)
+            {
+              Matter.Body.setPosition(p1.body, {x:280 ,y:435});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:180 ,y:637});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }-30
+    break;
+  
+    case 5 :if(p1.body.position.x !== 180)
+            {
+              Matter.Body.setPosition(p1.body, {x:180 ,y:637});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:280 ,y:129});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }
+    break;
+  
+    case 6 :if(p1.body.position.x !== 280)
+            {
+              Matter.Body.setPosition(p1.body, {x:280 ,y:129});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:281 ,y:332});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+          }
+    break;
+  
+    case 7 :if(p1.body.position.x !== 281)
+            {
+              Matter.Body.setPosition(p1.body, {x:281 ,y:332});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:638 ,y:485});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }
+    break;
+  
+    case 8 :if(p1.body.position.x !== 638)
+            {
+              Matter.Body.setPosition(p1.body, {x:638 ,y:485});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});            
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:26 ,y:435});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              
+            }
+    break;
+  
+    case 9 :if(p1.body.position.x !== 26)
+            {
+              Matter.Body.setPosition(p1.body, {x:26 ,y:435});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }else
+            {
+              Matter.Body.setPosition(p1.body, {x:383, y:535});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+            }
+    break;
+  
+    case 10 :if(p1.body.position.x !== 383)
+             {
+               Matter.Body.setPosition(p1.body, {x:383, y:535});
+               Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+               Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+             }else
+             {
+              Matter.Body.setPosition(p1.body, {x:382 ,y:690});
+              Matter.Body.setPosition(v1.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v2.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v3.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v4.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v5.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v6.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v7.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v8.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v9.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v10.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v11.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v12.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v13.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v14.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v15.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v16.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v17.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v18.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v19.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+              Matter.Body.setPosition(v20.body, {x:spr1.body.position.x , y:spr1.body.position.y});
+             }
+    break;
+   }
+}
+
 
