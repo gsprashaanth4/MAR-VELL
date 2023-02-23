@@ -292,7 +292,7 @@ function preload()
   cut = loadSound("laserh2.mp3");
   pTouch = loadSound("ptouch.mp3");
   pdimg = loadImage("lander111r.png");
-  winImg = loadImage("bgwrWrr.png");
+  winImg = loadImage("lander111r.png");
   lastExplodeImg = loadAnimation("burst11r.png", "burst12r.png", "burst13r.png", "burst14r.png", "burst15r.png");
 }
 
@@ -1143,11 +1143,11 @@ function setup()
 
    dialogB = createSprite(width/2, height/2 - 100, 400,250);
 
-    windo = new Windo();
+    /*windo = new Windo();
     Matter.World.remove(world, windo.body);
 
     joi = new Joyy();
-    Matter.World.remove(world, joi.body);
+    Matter.World.remove(world, joi.body);*/
 }
 
 function draw()
@@ -2144,11 +2144,11 @@ function draw()
    v14.display();
    v15.display();
 
-   windo.display();   
+   //windo.display();   
 
    //joi.display();
 
-   windo.body.position.x = spr1.body.position.x;
+   /*windo.body.position.x = spr1.body.position.x;
    windo.body.position.y = spr1.body.position.y;
 
    if(mouseIsPressed && (mouseX-70)>joi.body.position.x-10 && (mouseX-70)<joi.body.position.x+10)
@@ -2160,7 +2160,7 @@ function draw()
       joi.body.position.y = windo.body.position.y+300;
    }
 
-  //joi.display();
+  //joi.display();*/
 
   push();
   textSize(20);
