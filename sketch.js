@@ -2201,7 +2201,7 @@ function draw()
   }
    
 
-   push();
+   /*push();
    strokeWeight(10);
    if(disst > 200)
    {
@@ -2215,7 +2215,7 @@ function draw()
    //rect(windo.body.position.x, windo.body.position.y,20,20)
    //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x,windo.body.position.y);
    //line(spr1.body.position.x,spr1.body.position.y, windo.body.position.x,windo.body.position.y);
-   pop();
+   pop();*/
 
    
 
